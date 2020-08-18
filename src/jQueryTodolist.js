@@ -30,6 +30,7 @@ export class Todolist {
         localStorage.setItem('todos', JSON.stringify(this.$appStorage));//
     }
 
+    //모든 변화는 여기서 반영 해준다. 다른데서 하지 말것!
     renderTodos() {
         //일단 다 지워주고
         document.querySelector('.todoList').innerHTML = "";
@@ -47,22 +48,13 @@ export class Todolist {
             
             //add checkbox to newList
             //add eventListener
-    
-
-         
-            const $checkbox = $('<input type="checkbox" class="checkbox">');
-  
+            const $checkbox = $('<input type="checkbox">');
             $checkbox.on('click', this.checkEvent.bind(this));
             
             if (todo.completed) {
                 $newList.css("textDecoration", "line-through");
-                $('.checkbox').checked = !$('.checkbox').checked 
-      
+                $checkbox.prop("checked", true);
             }
-            // if (!$(this).is(':checked')) {
-            //     $('.checkbox').attr('checked');
-            // }
-            ///
             button.appendTo($newList);
             $checkbox.appendTo($newList);
             $newList.appendTo(this.$todoList);
@@ -81,15 +73,16 @@ export class Todolist {
     }
 
     checkEvent(event) {
-
+        event.preventDefault();
         const $target = event.target;
+      
         const index = $target.parentNode.dataset.index;
         this.$appStorage[index].completed = !this.$appStorage[index].completed;
-
+        (event) => {return $target.prop("checked");}
+        $target.style.visibility = 'hidden';
+       
         this.renderTodos();
         this.localStorageUpdate();
-        console.log(this.$appStorage[index].completed);
-        
     }
 }
 
